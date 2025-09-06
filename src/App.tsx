@@ -319,7 +319,12 @@ export default function PasswordGeneratorApp() {
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm text-slate-600 mb-1">
               <span>Password strength</span>
-              <span className="font-medium text-slate-800">
+              <span
+                className={`font-medium ${strength.color.replace(
+                  "bg-",
+                  "text-"
+                )}`}
+              >
                 {strength.label}
               </span>
             </div>
