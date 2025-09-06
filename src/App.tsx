@@ -183,13 +183,13 @@ export default function PasswordGeneratorApp() {
 
   useEffect(() => {
     if (mode === "say") {
-      // force only letters
       if (allowNumbers) setAllowNumbers(false);
       if (allowSymbols) setAllowSymbols(false);
     }
     regenerate();
   }, [length, allowUpper, allowLower, allowNumbers, allowSymbols, mode]);
 
+  // --- Copy logic unchanged ---
   function fallbackCopyTextToClipboard(text: string): boolean {
     try {
       const textArea = document.createElement("textarea");
@@ -259,10 +259,11 @@ export default function PasswordGeneratorApp() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-start justify-center p-6">
-      <div className="w-full max-w-3xl">
-        <header className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-semibold text-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-blue-100 p-6">
+      {/* Big card frame */}
+      <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-8">
+        <header className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-slate-900">
             Secure Password Generator
           </h1>
           <p className="text-slate-600 mt-1">
@@ -272,7 +273,7 @@ export default function PasswordGeneratorApp() {
 
         <motion.section
           layout
-          className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6"
+          className="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6"
         >
           <div className="flex items-center gap-3">
             <div
@@ -285,7 +286,7 @@ export default function PasswordGeneratorApp() {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={regenerate}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 hover:bg-slate-50 transition"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 hover:bg-slate-100 transition"
                 aria-label="Regenerate password"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -344,7 +345,7 @@ export default function PasswordGeneratorApp() {
           </div>
         </motion.section>
 
-        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+        <section className="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
           <h2 className="text-xl font-semibold text-slate-900 mb-4">
             Customize your password
           </h2>
@@ -429,7 +430,7 @@ export default function PasswordGeneratorApp() {
             <Info className="w-4 h-4 mt-0.5" />
             <p>
               "Easy to say" creates pronounceable passwords using only letters.
-              "Easy to read" removes look‑alike characters such as 0/O and 1/l.
+              "Easy to read" removes look-alike characters such as 0/O and 1/l.
               "All characters" follows your exact selections above.
             </p>
           </div>
