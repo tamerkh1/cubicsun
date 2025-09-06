@@ -182,6 +182,11 @@ export default function PasswordGeneratorApp() {
   };
 
   useEffect(() => {
+    if (mode === "say") {
+      // force only letters
+      if (allowNumbers) setAllowNumbers(false);
+      if (allowSymbols) setAllowSymbols(false);
+    }
     regenerate();
   }, [length, allowUpper, allowLower, allowNumbers, allowSymbols, mode]);
 
