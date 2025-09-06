@@ -320,7 +320,7 @@ export default function PasswordGeneratorApp() {
             <div className="flex items-center justify-between text-sm text-slate-600 mb-1">
               <span>Password strength</span>
               <span
-                className={`font-medium ${strength.color.replace(
+                className={`font-medium transition-colors duration-500 ${strength.color.replace(
                   "bg-",
                   "text-"
                 )}`}
