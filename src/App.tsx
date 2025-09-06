@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Copy, RefreshCw, Check, Info } from "lucide-react";
 
@@ -264,7 +265,10 @@ export default function PasswordGeneratorApp() {
           </p>
         </header>
 
-        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6">
+        <motion.section
+          layout
+          className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6"
+        >
           <div className="flex items-center gap-3">
             <div
               ref={passwordRef}
@@ -296,9 +300,21 @@ export default function PasswordGeneratorApp() {
             </div>
           </div>
 
-          {copyStatus && (
-            <div className="mt-3 text-sm text-amber-600">{copyStatus}</div>
-          )}
+          <AnimatePresence>
+            {copyStatus && (
+              <motion.div
+                key="copy-status"
+                layout
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+                className="mt-3 text-sm text-green-600 font-medium"
+              >
+                {copyStatus}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm text-slate-600 mb-1">
@@ -308,13 +324,15 @@ export default function PasswordGeneratorApp() {
               </span>
             </div>
             <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-              <div
+              <motion.div
                 className="h-full bg-green-500"
-                style={{ width: `${strength.width}%` }}
+                initial={{ width: 0 }}
+                animate={{ width: `${strength.width}%` }}
+                transition={{ duration: 0.5 }}
               />
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
           <h2 className="text-xl font-semibold text-slate-900 mb-4">
