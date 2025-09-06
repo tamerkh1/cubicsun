@@ -80,10 +80,10 @@ function estimateStrength({
   if (mode === "say") classes = Math.min(classes, upper || lower ? 1 : 0);
 
   const score = length * (classes + 1);
-  if (score < 30) return { label: "Weak", width: 25 };
-  if (score < 60) return { label: "Fair", width: 50 };
-  if (score < 90) return { label: "Strong", width: 75 };
-  return { label: "Very strong", width: 100 };
+  if (score < 30) return { label: "Weak", width: 25, color: "bg-red-500" };
+  if (score < 60) return { label: "Fair", width: 50, color: "bg-yellow-500" };
+  if (score < 90) return { label: "Strong", width: 75, color: "bg-blue-500" };
+  return { label: "Very strong", width: 100, color: "bg-green-500" };
 }
 
 // --- Generator -------------------------------------------------------------
@@ -325,7 +325,7 @@ export default function PasswordGeneratorApp() {
             </div>
             <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-green-500"
+                className={`h-full ${strength.color}`}
                 initial={{ width: 0 }}
                 animate={{ width: `${strength.width}%` }}
                 transition={{ duration: 0.5 }}
