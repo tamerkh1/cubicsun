@@ -25,7 +25,9 @@ const NUM = "0123456789";
 const SYM = "!@#$%^&*()-_=+[]{};:,.?";
 
 const VOWELS = "aeiou";
-const CONSONANTS = [...LOWER].filter((c) => !VOWELS.includes(c)).join("");
+const CONSONANTS = Array.from(LOWER)
+  .filter((c) => !VOWELS.includes(c))
+  .join("");
 
 function randomInt(max) {
   return Math.floor(Math.random() * max);
