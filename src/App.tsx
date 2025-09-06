@@ -29,18 +29,20 @@ const CONSONANTS = Array.from(LOWER)
   .filter((c) => !VOWELS.includes(c))
   .join("");
 
-function randomInt(max) {
+function randomInt(max: number): number {
   return Math.floor(Math.random() * max);
 }
-function pick(str) {
+function pick(str: string): string {
   return str[randomInt(str.length)];
 }
 
-function stripAmbiguous(str) {
-  return [...str].filter((c) => !AMBIGUOUS.has(c)).join("");
+function stripAmbiguous(str: string): string {
+  return Array.from(str)
+    .filter((c) => !AMBIGUOUS.has(c))
+    .join("");
 }
 
-function ensureAtLeastOneFromEach(groups, base) {
+function ensureAtLeastOneFromEach(groups: string[], base: string): string {
   let out = base.split("");
   groups.forEach((g) => {
     if (g && g.length) {
@@ -51,7 +53,23 @@ function ensureAtLeastOneFromEach(groups, base) {
   return out.join("");
 }
 
-function estimateStrength({ length, upper, lower, numbers, symbols, mode }) {
+interface StrengthOptions {
+  length: number;
+  upper: boolean;
+  lower: boolean;
+  numbers: boolean;
+  symbols: boolean;
+  mode: "say" | "read" | "all";
+}
+
+function estimateStrength({
+  length,
+  upper,
+  lower,
+  numbers,
+  symbols,
+  mode,
+}: StrengthOptions) {
   let classes = 0;
   if (upper) classes++;
   if (lower) classes++;
@@ -68,7 +86,16 @@ function estimateStrength({ length, upper, lower, numbers, symbols, mode }) {
 }
 
 // --- Generator -------------------------------------------------------------
-function generatePassword(opts) {
+interface GenerateOptions {
+  length: number;
+  allowUpper: boolean;
+  allowLower: boolean;
+  allowNumbers: boolean;
+  allowSymbols: boolean;
+  mode: "say" | "read" | "all";
+}
+
+function generatePassword(opts: GenerateOptions): string {
   const { length, allowUpper, allowLower, allowNumbers, allowSymbols, mode } =
     opts;
 
@@ -120,7 +147,7 @@ export default function PasswordGeneratorApp() {
   const [allowLower, setAllowLower] = useState(true);
   const [allowNumbers, setAllowNumbers] = useState(true);
   const [allowSymbols, setAllowSymbols] = useState(true);
-  const [mode, setMode] = useState("read");
+  const [mode, setMode] = useState<"say" | "read" | "all">("read");
   const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
@@ -157,7 +184,7 @@ export default function PasswordGeneratorApp() {
     regenerate();
   }, [length, allowUpper, allowLower, allowNumbers, allowSymbols, mode]);
 
-  function fallbackCopyTextToClipboard(text) {
+  function fallbackCopyTextToClipboard(text: string): boolean {
     try {
       const textArea = document.createElement("textarea");
       textArea.value = text;
@@ -210,10 +237,12 @@ export default function PasswordGeneratorApp() {
     try {
       if (passwordRef.current) {
         const range = document.createRange();
-        range.selectNodeContents(passwordRef.current);
+        range.selectNodeContents(passwordRef.current!);
         const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+        if (sel) {
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
       }
     } catch (e) {}
 
@@ -390,52 +419,48 @@ export default function PasswordGeneratorApp() {
   );
 }
 
-function RadioCard({ label, description, checked, onChange }) {
+type RadioCardProps = {
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: () => void;
+};
+
+function RadioCard({ label, description, checked, onChange }: RadioCardProps) {
   return (
     <button
       type="button"
-      onClick={onChange}
-      className={`text-left rounded-2xl border p-4 transition shadow-sm hover:shadow-md focus:outline-none ${
-        checked ? "border-slate-900 ring-2 ring-slate-300" : "border-slate-200"
+      className={`flex flex-col rounded-2xl border p-4 text-left transition shadow-sm hover:shadow-md ${
+        checked ? "border-blue-500 ring-2 ring-blue-300" : ""
       }`}
-      aria-pressed={checked}
+      onClick={onChange}
     >
-      <div className="flex items-center justify-between mb-1">
-        <span className="font-medium text-slate-900">{label}</span>
-        <span
-          className={`inline-block w-3 h-3 rounded-full ${
-            checked ? "bg-slate-900" : "bg-slate-300"
-          }`}
-        />
-      </div>
-      <p className="text-sm text-slate-600">{description}</p>
+      <span className="font-medium">{label}</span>
+      <span className="text-sm text-gray-500">{description}</span>
     </button>
   );
 }
 
-function CheckCard({ label, checked, onChange }) {
+type CheckCardProps = {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+};
+
+function CheckCard({ label, checked, onChange }: CheckCardProps) {
   return (
     <label
       className={`flex items-center gap-3 rounded-2xl border p-4 cursor-pointer select-none transition shadow-sm hover:shadow-md ${
-        checked ? "border-slate-900" : "border-slate-200"
+        checked ? "border-blue-500 ring-2 ring-blue-300" : ""
       }`}
     >
       <input
         type="checkbox"
-        className="peer hidden"
+        className="hidden"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
       />
-      <span
-        className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-          checked
-            ? "bg-slate-900 border-slate-900"
-            : "bg-white border-slate-300"
-        }`}
-      >
-        {checked && <Check className="w-3 h-3 text-white" />}
-      </span>
-      <span className="text-slate-800">{label}</span>
+      <span className="font-medium">{label}</span>
     </label>
   );
 }
